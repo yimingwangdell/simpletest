@@ -1,0 +1,273 @@
+Flink 实时流处理示例
+====================
+
+本文档整理 Flink 实时流处理（Data Pipeline & ETL）的相关示例和说明。
+
+
+## 一、Data Pipeline 概念
+
+### 什么是 Data Pipeline？
+Data Pipeline = 数据从源到目标的流动过程，包含处理步骤
+
+Source → Processing → Sink
+  ↓         ↓          ↓
+ 数据     转换       存储
+
+### Flink Data Pipeline 三大组件
+
+1. Source (数据源)
+   ├─ Kafka
+   ├─ Files (HDFS, S3)
+   ├─ Databases (MySQL, PostgreSQL)
+   ├─ Socket
+   └─ Custom sources
+
+2. Transformation (数据处理)
+   ├─ Map (一对一转换)
+   ├─ Filter (过滤)
+   ├─ FlatMap (一对多转换)
+   ├─ KeyBy (分组)
+   ├─ Reduce/Aggregate (聚合)
+   ├─ Join (连接)
+   └─ Window (窗口计算)
+
+3. Sink (数据目的地)
+   ├─ Kafka
+   ├─ Files
+   ├─ Databases
+   ├─ Elasticsearch
+   ├─ Redis
+   └─ Custom sinks
+
+
+## 二、ETL 概念
+
+### 什么是 ETL？
+ETL = Extract, Transform, Load
+- Extract (提取): 从数据源读取数据
+- Transform (转换): 清洗、转换、处理数据
+- Load (加载): 将处理后的数据写入目标系统
+
+### ETL Pipeline 流程示例
+Source (原始数据)
+   ↓ Extract
+Kafka (传感器数据)
+   ↓ Transform
+Flink (清洗、过滤、聚合)
+   ↓ Load
+HDFS/Database (处理后数据)
+
+
+## 三、Flink ETL 代码示例
+
+### 简单 ETL Pipeline
+```java
+// 1. Extract - 从Kafka读取数据
+DataStream<SensorData> rawData = env
+    .addSource(new FlinkKafkaConsumer<>("sensor-topic",
+        new SensorDataDeserializer(), properties));
+
+// 2. Transform - 数据转换
+DataStream<ProcessedData> processedData = rawData
+    .filter(data -> data.getTemperature() > 0)  // 过滤无效数据
+    .map(data -> new ProcessedData(             // 转换数据格式
+        data.getSensorId(),
+        data.getTemperature(),
+        data.getTimestamp(),
+        calculateStatus(data.getTemperature())
+    ))
+    .keyBy(ProcessedData::getSensorId)          // 按传感器ID分组
+    .timeWindow(Time.minutes(5))                // 5分钟时间窗口
+    .aggregate(new TemperatureAggregator());    // 聚合计算
+
+// 3. Load - 写入数据库
+processedData.addSink(new JdbcSink(
+    "INSERT INTO processed_sensor_data VALUES (?, ?, ?, ?)",
+    (ps, data) -> {
+        ps.setString(1, data.getSensorId());
+        ps.setDouble(2, data.getAvgTemperature());
+        ps.setLong(3, data.getWindowEnd());
+        ps.setString(4, data.getStatus());
+    }
+));
+```
+
+
+## 四、轨道交通实时流处理场景
+
+### 场景描述：轨道交通传感器数据处理
+
+Extract:
+├─ 从Kafka读取传感器原始数据
+├─ 数据格式：JSON/Avro/Protobuf
+└─ 数据量：每秒数千条
+
+Transform:
+├─ 数据清洗（去除异常值）
+├─ 数据标准化（单位转换）
+├─ 数据补全（缺失值处理）
+├─ 特征提取（计算统计指标）
+├─ 异常检测（规则引擎/ML模型）
+└─ 实时聚合（时间窗口统计）
+
+Load:
+├─ 实时数据 → Redis（缓存）
+├─ 历史数据 → HDFS（归档）
+├─ 告警数据 → Elasticsearch（搜索）
+├─ 统计数据 → TimescaleDB（时序）
+└─ 告警推送 → WebSocket（前端）
+
+
+## 五、Flink ETL vs 传统 ETL
+
+| 特性     | 传统ETL (Batch) | Flink ETL (Streaming) |
+|---------|----------------|----------------------|
+| 处理模式 | 批处理（离线）   | 流处理（实时）        |
+| 延迟    | 小时/天级       | 毫秒/秒级            |
+| 数据量  | 大批量          | 持续流式              |
+| 适用场景 | 历史分析       | 实时监控              |
+| 复杂度  | 相对简单        | 需要处理时间、状态     |
+
+
+## 六、Flink 常见 ETL 操作
+
+### 1. 数据清洗 (Data Cleaning)
+```java
+DataStream<CleanData> cleanedData = rawData
+    .filter(data -> data != null)                    // 去除空值
+    .filter(data -> data.getValue() != null)         // 去除字段空值
+    .filter(data -> data.getTimestamp() > 0)         // 去除无效时间戳
+    .map(data -> removeOutliers(data));              // 去除异常值
+```
+
+### 2. 数据丰富化 (Data Enrichment)
+```java
+// 关联外部数据
+DataStream<EnrichedData> enrichedData = sensorData
+    .connect(deviceInfoStream)
+    .keyBy("sensorId", "deviceId")
+    .flatMap(new EnrichmentFunction());              // 关联设备信息
+```
+
+### 3. 数据聚合 (Data Aggregation)
+```java
+DataStream<AggregatedData> aggregatedData = sensorData
+    .keyBy(SensorData::getType)
+    .window(TumblingEventTimeWindows.of(Time.minutes(5)))
+    .aggregate(new StatisticsAggregator());          // 计算统计指标
+```
+
+### 4. 数据验证 (Data Validation)
+```java
+DataStream<ValidatedData> validatedData = rawData
+    .map(new DataValidator())                        // 验证规则
+    .filter(data -> data.isValid());                 // 过滤无效数据
+```
+
+
+## 七、完整 ETL Pipeline 示例（轨道交通场景）
+
+```java
+public class RailTransitETL {
+    public static void main(String[] args) throws Exception {
+        // 创建执行环境
+        StreamExecutionEnvironment env =
+            StreamExecutionEnvironment.getExecutionEnvironment();
+
+        // Extract: 从Kafka读取传感器数据
+        DataStream<SensorReading> sensorData = env
+            .addSource(new FlinkKafkaConsumer<>(
+                "rail-sensor-topic",
+                new SensorReadingDeserializer(),
+                kafkaProperties
+            ));
+
+        // Transform: ETL处理
+        DataStream<ProcessedSensorData> processedData = sensorData
+            // 1. 数据清洗
+            .filter(reading -> reading.getValue() != null)
+            .filter(reading -> reading.getTimestamp() > 0)
+
+            // 2. 数据转换
+            .map(reading -> normalizeUnits(reading))
+
+            // 3. 异常检测
+            .keyBy(SensorReading::getSensorId)
+            .process(new AnomalyDetector())
+
+            // 4. 实时聚合
+            .keyBy(ProcessedSensorData::getSensorType)
+            .window(TumblingEventTimeWindows.of(Time.minutes(1)))
+            .aggregate(new SensorStatsAggregator());
+
+        // Load: 多目的地写入
+        // 实时数据写入Redis
+        processedData.addSink(new RedisSink(redisConfig));
+
+        // 告警数据写入Elasticsearch
+        processedData
+            .filter(data -> data.isAnomaly())
+            .addSink(new ElasticsearchSink(esConfig));
+
+        // 历史数据写入HDFS
+        processedData
+            .windowAll(TumblingEventTimeWindows.of(Time.hours(1)))
+            .process(new HDFSWriter());
+
+        // 执行作业
+        env.execute("Rail Transit Sensor ETL Pipeline");
+    }
+}
+```
+
+
+## 八、Flink ETL 的核心优势
+
+### 1. 实时处理 (Real-time Processing)
+传统ETL: 数据 → 等待 → 批处理 → 结果（延迟高）
+Flink ETL: 数据 → 即时处理 → 结果（低延迟）
+
+### 2. 精确一次语义 (Exactly-Once Semantics)
+保证数据不丢失、不重复：
+├─ Checkpoint机制（状态快照）
+├─ 幂等性写入
+└─ 事务支持
+
+### 3. 状态管理 (State Management)
+Flink管理处理状态：
+├─ Keyed State（按键分组状态）
+├─ Operator State（算子状态）
+└─ 故障恢复
+
+### 4. 事件时间处理 (Event Time Processing)
+基于事件时间的处理：
+├─ 处理乱序数据
+├─ 水位线机制
+└─ 延迟数据处理
+
+
+## 九、轨道交通智能运维平台中 Flink 的应用
+
+实时数据流架构：
+传感器 → Kafka → Flink → Elasticsearch/Redis
+                  ↓
+               告警系统
+
+具体应用：
+├─ 实时处理传感器数据
+├─ 实时异常检测和告警
+├─ 实时数据聚合和统计
+├─ 实时数据清洗和标准化
+├─ 实时状态监控
+└─ 实时预测推理
+
+
+## 总结
+
+Data Pipeline in Flink:
+- 数据从源到目标的流动过程，包含源、转换、目标三个部分
+
+ETL in Flink:
+- 使用Flink进行实时数据提取、转换、加载
+- 相比传统批处理ETL具有低延迟、实时性强的优势
+- 适合轨道交通智能运维平台等需要实时处理的场景
