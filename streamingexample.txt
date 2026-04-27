@@ -1,0 +1,466 @@
+地铁轨交综合智能运维平台技术体系
+================================
+
+地铁轨交综合智能运维平台需要掌握以下技术体系：
+
+
+## 1. 感知层技术
+
+### 传感器技术
+物理传感器：
+├─ 振动传感器（加速度计）
+├─ 温度传感器（热电偶、热敏电阻）
+├─ 压力传感器（液压、气压）
+├─ 位移传感器（LVDT、激光）
+├─ 电流/电压传感器（霍尔、互感器）
+├─ 光电传感器（光电开关、编码器）
+└─ 超声波传感器（测距、探伤）
+
+智能传感器：
+├─ MEMS传感器
+├─ 智能变送器
+├─ 无线传感器网络
+└─ 边缘计算节点
+
+### 视觉检测技术
+图像采集：
+├─ 工业相机
+├─ 线阵相机
+├─ 热成像相机
+├─ 高速相机
+└─ 3D相机
+
+图像处理：
+├─ OpenCV
+├─ 深度学习（YOLO、Mask R-CNN）
+├─ 边缘检测
+└─ 图像识别
+
+### 专用检测设备
+轨道检测：
+├─ 轨道几何状态检测
+├─ 钢轨表面伤损检测
+├─ 焊缝检测
+└─ 轨距检测
+
+车辆检测：
+├─ 轮对检测
+├─ 车轮轮廓测量
+├─ 轴承温度监测
+└─ 制动系统检测
+
+
+## 2. 传输层技术
+
+### 通信网络
+有线网络：
+├─ 工业以太网（Profinet、EtherCAT）
+├─ 光纤通信
+├─ RS485/RS232
+└─ CAN总线
+
+无线网络：
+├─ 5G通信
+├─ 4G LTE
+├─ WiFi 6
+├─ LoRaWAN
+├─ NB-IoT
+└─ Zigbee
+
+### 通信协议
+工业协议：
+├─ Modbus TCP/RTU
+├─ OPC UA
+├─ MQTT
+├─ CoAP
+└─ AMQP
+
+车地通信：
+├─ WLAN
+├─ LTE-M
+└─ 专用无线通信
+
+### 边缘计算
+边缘设备：
+├─ 工业网关
+├─ 边缘服务器
+├─ 嵌入式系统（STM32、树莓派）
+└─ FPGA加速卡
+
+边缘计算框架：
+├─ Docker
+├─ Kubernetes
+├─ EdgeX Foundry
+└─ AWS IoT Greengrass
+
+
+## 3. 数据处理技术
+
+### 实时流处理
+流处理引擎：
+├─ Apache Flink ⭐ 核心技术
+├─ Apache Spark Streaming
+├─ Apache Kafka Streams
+├─ Apache Storm
+└─ AWS Kinesis
+
+实时计算：
+├─ 复杂事件处理（CEP）
+├─ 窗口计算
+├─ 状态管理
+└─ 实时聚合
+
+### 消息队列
+消息中间件：
+├─ Apache Kafka ⭐ 核心技术
+├─ Apache Pulsar
+├─ RabbitMQ
+├─ Redis Streams
+└─ NATS
+
+### 数据清洗
+ETL工具：
+├─ Apache NiFi
+├─ Apache Airflow
+├─ Talend
+└─ 自定义Flink作业
+
+
+## 4. 存储技术
+
+### 分布式存储
+文件存储：
+├─ HDFS ⭐ 核心技术
+├─ Ceph
+├─ MinIO
+└─ GlusterFS
+
+对象存储：
+├─ AWS S3
+├─ 阿里云OSS
+├─ MinIO
+└─ Ceph RGW
+
+### 时序数据库
+时序存储：
+├─ InfluxDB ⭐ 核心技术
+├─ TimescaleDB
+├─ Prometheus
+├─ OpenTSDB
+└─ TDengine
+
+### 关系数据库
+关系型数据库：
+├─ PostgreSQL
+├─ MySQL
+├─ Oracle
+└─ SQL Server
+
+NoSQL数据库：
+├─ MongoDB
+├─ Redis ⭐ 核心技术
+└─ Cassandra
+
+### 搜索引擎
+全文搜索：
+├─ Elasticsearch ⭐ 核心技术
+├─ Solr
+└─ OpenSearch
+
+
+## 5. 分析与建模技术
+
+### 大数据处理
+批处理：
+├─ Apache Spark ⭐ 核心技术
+├─ Apache Hadoop (MapReduce)
+└─ Presto/Trino
+
+数据仓库：
+├─ Apache Hive
+├─ Apache Impala
+├─ ClickHouse
+└─ Apache Doris
+
+### 机器学习
+机器学习框架：
+├─ TensorFlow/PyTorch ⭐ 核心技术
+├─ Scikit-learn
+├─ XGBoost/LightGBM
+└─ Apache Spark MLlib
+
+深度学习：
+├─ CNN（图像识别）
+├─ RNN/LSTM（时序预测）
+├─ Transformer（NLP）
+└─ GAN（异常检测）
+
+传统ML算法：
+├─ 随机森林
+├─ 支持向量机
+├─ 聚类算法
+└─ 异常检测（Isolation Forest）
+
+### 专业建模
+物理建模：
+├─ MATLAB/Simulink
+├─ ANSYS（有限元分析）
+├─ Adams（多体动力学）
+└─ Python科学计算（NumPy、SciPy）
+
+数字孪生：
+├─ Unity 3D
+├─ Unreal Engine
+├─ MATLAB Simulink
+└─ 专用数字孪生平台
+
+### 统计分析
+统计分析：
+├─ R语言
+├─ Python（Pandas、SciPy）
+├─ SPSS
+└─ SAS
+
+
+## 6. 应用开发技术
+
+### 后端开发
+编程语言：
+├─ Java (Spring Boot) ⭐ 常用
+├─ Python (Django/Flask/FastAPI)
+├─ Go (Gin/Echo)
+├─ Node.js (Express/NestJS)
+└─ C# (.NET Core)
+
+微服务架构：
+├─ Spring Cloud
+├─ Kubernetes ⭐ 核心技术
+├─ Docker ⭐ 核心技术
+├─ Istio (Service Mesh)
+└─ gRPC
+
+### 前端开发
+前端框架：
+├─ React ⭐ 常用
+├─ Vue.js ⭐ 常用
+├─ Angular
+└─ TypeScript
+
+可视化：
+├─ ECharts ⭐ 常用
+├─ D3.js
+├─ Three.js（3D可视化）
+├─ Highcharts
+└─ AntV
+
+移动端：
+├─ React Native
+├─ Flutter
+├─ 原生开发（iOS/Android）
+└─ 微信小程序
+
+### BI与报表
+BI工具：
+├─ Apache Superset ⭐ 推荐开源
+├─ Tableau
+├─ Power BI
+├─ FineReport
+└─ 自研报表系统
+
+
+## 7. 系统集成技术
+
+### SCADA集成
+SCADA系统：
+├─ WinCC
+├─ Ignition
+├─ Inductive Automation
+└─ 开源SCADA（OpenSCADA）
+
+数据接口：
+├─ OPC UA
+├─ Modbus
+├─ DDE/OPC
+└─ REST API
+
+### 信号系统集成
+信号系统接口：
+├─ ATS（自动列车监控）
+├─ ATP（自动列车保护）
+├─ ATO（自动列车运行）
+└─ 联锁系统
+
+通信协议：
+├─ 专用协议
+├─ TCP/IP
+└─ 串口通信
+
+
+## 8. 安全技术
+
+### 网络安全
+网络安全：
+├─ 防火墙
+├─ IDS/IPS
+├─ VPN
+├─ 网络隔离
+└─ 安全网关
+
+### 数据安全
+数据加密：
+├─ TLS/SSL
+├─ AES加密
+├─ 数据脱敏
+└─ 密钥管理
+
+访问控制：
+├─ RBAC（基于角色的访问控制）
+├─ OAuth 2.0
+├─ LDAP/AD集成
+└─ 单点登录（SSO）
+
+### 工业安全
+工控安全：
+├─ IEC 62443标准
+├─ 安全审计
+├─ 入侵检测
+└─ 安全培训
+
+
+## 9. 运维技术
+
+### 系统监控
+监控系统：
+├─ Prometheus + Grafana ⭐ 推荐
+├─ Zabbix
+├─ Nagios
+└─ ELK Stack（日志）
+
+APM监控：
+├─ SkyWalking
+├─ Pinpoint
+└─ Jaeger（分布式追踪）
+
+### DevOps
+CI/CD：
+├─ Jenkins
+├─ GitLab CI
+├─ GitHub Actions
+└─ ArgoCD
+
+配置管理：
+├─ Ansible
+├─ Terraform
+├─ Helm
+└─ Kubernetes
+
+### 容器技术
+容器化：
+├─ Docker ⭐ 核心技术
+├─ Kubernetes ⭐ 核心技术
+├─ Containerd
+└─ Podman
+
+
+## 10. 专业领域知识
+
+### 轨道交通专业知识
+信号系统：
+├─ CBTC系统
+├─ 轨道电路
+├─ 联锁逻辑
+└─ 信号机原理
+
+供电系统：
+├─ 牵引供电
+├─ 变电所
+├─ 接触网/三轨
+└─ 杂散电流防护
+
+车辆系统：
+├─ 转向架
+├─ 制动系统
+├─ 牵引系统
+└─ 辅助系统
+
+轨道系统：
+├─ 轨道结构
+├─ 道岔
+├─ 无缝线路
+└─ 轨道养护
+
+
+## 技术栈推荐
+
+### 核心技术（必须掌握）
+大数据处理：
+├─ Apache Kafka
+├─ Apache Flink
+├─ Apache Spark
+└─ HDFS
+
+时序数据：
+├─ InfluxDB
+├─ Redis
+└─ Elasticsearch
+
+应用开发：
+├─ Java/Spring Boot
+├─ Python
+├─ React/Vue.js
+└─ Kubernetes
+
+机器学习：
+├─ Python (TensorFlow/PyTorch)
+├─ Scikit-learn
+└─ 数据分析
+
+### 重要技术（强烈推荐）
+物联网：
+├─ MQTT
+├─ OPC UA
+├─ 边缘计算
+└─ 工业协议
+
+可视化：
+├─ ECharts
+├─ Three.js
+└─ BI工具
+
+运维：
+├─ Docker
+├─ Kubernetes
+├─ Prometheus
+└─ ELK Stack
+
+
+## 学习路径建议
+
+### 初级阶段
+1. 基础编程（Java/Python）
+2. 数据库基础（SQL、Redis）
+3. Linux基础
+4. 网络基础
+5. 轨道交通基础知识
+
+### 中级阶段
+1. 大数据技术（Kafka、Flink）
+2. 时序数据库（InfluxDB）
+3. 机器学习基础
+4. 微服务架构
+5. 前端开发
+
+### 高级阶段
+1. 深度学习
+2. 数字孪生
+3. 系统架构设计
+4. 性能优化
+5. 安全防护
+
+
+总结
+====
+这个智能运维平台涉及的技术面很广，建议根据具体岗位需求重点掌握相关技术栈：
+- 数据工程师：重点掌握大数据处理技术（Kafka、Flink、Spark、HDFS）
+- 算法工程师：重点掌握机器学习技术（TensorFlow/PyTorch、Scikit-learn）
+- 应用开发工程师：重点掌握应用开发技术（Spring Boot、React/Vue.js、Kubernetes）
